@@ -12,7 +12,11 @@ import Input from '../input/Input'
 import { toast } from 'react-hot-toast'
 import Button from '../Button'
 import { signIn } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+
 const RegisterModal = () => {
+    const router = useRouter()
+
     const registerModal = useRegisterModal()
     const [isLoading, setIsLoading] = useState(false)
     const {
@@ -30,7 +34,26 @@ const RegisterModal = () => {
     const onSubmit: SubmitHandler<FieldValues> = (data) => {
         setIsLoading(true)
         axios.post('/api/register', data)
-            .then(() => {
+            .then((res) => {
+                toast.success('Register Success.')
+                if(res.data)
+
+                signIn('credentials', {
+                    ...data,
+                    redirect: false,
+                }).then((callback) => {
+                        setIsLoading(false);
+    
+                        if (callback?.ok) {
+                            toast.success('Logged in');
+                            router.refresh();
+                   
+                        }
+    
+                        if (callback?.error) {
+                            toast.error(callback.error);
+                        }
+                    });
                 registerModal.onClose()
             })
             .catch((error) => {
