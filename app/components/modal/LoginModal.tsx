@@ -62,7 +62,7 @@ const LoginModal = () => {
     const footerContent = (
         <div className='flex flex-col gap-4 mt-3'>
             <hr />
-            <Button outline label="Continue with Google" icon={FcGoogle} onClick={() => { }} />
+            <Button outline label="Continue with Google" icon={FcGoogle} onClick={() => {signIn('google') }} />
         </div>
     )
     return (
